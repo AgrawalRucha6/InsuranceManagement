@@ -40,7 +40,7 @@ node{
 	
     stage('Docker Image Scan'){
         echo 'Scanning Docker image for vulnerbilities'
-        sh "docker build -t ${dockerHubUser}/insure-me:${tag} ."
+        sh "docker build -t ${$dockerUser}/containerName:${tag} ."
     }   
 	
     stage('Publishing Image to DockerHub'){
@@ -54,8 +54,8 @@ node{
 	
 	stage('Docker Container Deployment'){
 		sh "docker rm $containerName -f"
-		sh "docker pull $dockerHubUser/$containerName:$tag"
-		sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $dockerHubUser/$containerName:$tag"
+		sh "docker pull $dockerUser/$containerName:$tag"
+		sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $dockerUser/$containerName:$tag"
 		echo "Application started on port: ${httpPort} (http)"
 	}
 }
