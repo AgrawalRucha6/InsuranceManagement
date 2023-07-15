@@ -35,7 +35,9 @@ node{
     
     stage('Docker Image Build'){
         echo 'Creating Docker image'
-        sh "docker build -t $dockerUser/$containerName:$tag --pull --no-cache ."
+	withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'dockerUser', passwordVariable: 'dockerPassword')]) {
+        	sh "docker build -t $dockerUser/$containerName:$tag --pull --no-cache ."
+	}
     }
 	
     stage('Docker Image Scan'){
