@@ -42,7 +42,9 @@ node{
 	
     stage('Docker Image Scan'){
         echo 'Scanning Docker image for vulnerbilities'
-        sh "docker build -t ${$dockerUser}/containerName:${tag} ."
+	    withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'dockerUser', passwordVariable: 'dockerPassword')]) {
+        	sh "docker build -t ${$dockerUser}/containerName:${tag} ."
+	    }
     }   
 	
     stage('Publishing Image to DockerHub'){
