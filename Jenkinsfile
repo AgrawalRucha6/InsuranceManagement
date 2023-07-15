@@ -57,10 +57,12 @@ node{
     }    
 	
 	stage('Docker Container Deployment'){
-		sh "docker rm $containerName -f"
-		sh "docker pull $dockerUser/$containerName:$tag"
-		sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $dockerUser/$containerName:$tag"
-		echo "Application started on port: ${httpPort} (http)"
+		withCredentials([usernamePassword(credentialsId: 'dockerHubAccount', usernameVariable: 'dockerUser', passwordVariable: 'dockerPassword')]) {
+			sh "docker rm $containerName -f"
+			sh "docker pull $dockerUser/$containerName:$tag"
+			sh "docker run -d --rm -p $httpPort:$httpPort --name $containerName $dockerUser/$containerName:$tag"
+			echo "Application started on port: ${httpPort} (http)"
+		}
 	}
 }
 
